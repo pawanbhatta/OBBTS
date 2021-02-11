@@ -9,18 +9,18 @@ const busSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    seats: {
+    type: {
+        type: String,
+        required: true
+    },
+    numOfSeats: {
         type: Number,
         required: true
     },
-    arrival: {
-        type: Date,
-        required: true
-    },
-    depart: {
-        type: Date,
-        required: true
-    },
+    operator: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User'
+    }
 }, { timestamps: true });
 
 const Bus = mongoose.model('Bus', busSchema);

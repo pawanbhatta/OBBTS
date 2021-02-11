@@ -1,0 +1,34 @@
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+    <a class="navbar-brand" href="/dashboard">Dashboard</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor01" aria-controls="navbarColor01" aria-expanded="false" aria-label="Toggle navigation" wfd-id="660">
+    <span class="navbar-toggler-icon" wfd-id="472"></span>
+  </button>
+
+    <div class="collapse navbar-collapse" id="navbarColor01" wfd-id="462">
+        <ul class="navbar-nav mr-auto" wfd-id="464">
+            <li class="nav-item" wfd-id="468">
+                <a class="nav-link" href="/dashboard/buses">Buses</a>
+            </li>
+            <li class="nav-item" wfd-id="467">
+                <a class="nav-link" href="/dashboard/schedules">Schedules</a>
+            </li>
+            <li class="nav-item" wfd-id="466">
+                <a class="nav-link" href="/dashboard/checkpoints">Checkpoints</a>
+            </li>
+            <li class="nav-item" wfd-id="469">
+                <a class="nav-link" href="/dashboard/bookers">Bookers</a>
+            </li>
+            <li class="nav-item" wfd-id="464">
+                <a class="nav-link" href="/dashboard/passengers">Passengers</a>
+            </li>
+            <li class="nav-item" wfd-id="462">
+                <a class="nav-link" href="/dashboard/tickets">Tickets</a>
+            </li>
+
+        </ul>
+        <a class="navbar-brand" href="/dashboard">
+            <%= user.name %> (
+                <%= user.roles %> )</a>
+        <a href="/users/logout" class="btn btn-secondary">Logout</a>
+    </div>
+</nav>

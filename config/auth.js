@@ -14,6 +14,10 @@ module.exports = {
         next();
     },
 
+    checkOperator: (user) => {
+        return user.roles[0] == 'Operator';
+    },
+
     ensureAuthorized: (req, res, next) => {
         if (req.isAuthenticated()) {
             if (req.user.roles[0] == 'Admin') {

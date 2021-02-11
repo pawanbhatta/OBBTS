@@ -21,11 +21,11 @@ const UserSchema = new mongoose.Schema({
         type: String,
         required: true
     },
+    buses: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Bus'
+    }],
     roles: ['Admin', 'Operator'],
-    date: {
-        type: Date,
-        default: Date.now
-    }
 }, { timestamps: true });
 
 const User = mongoose.model('User', UserSchema);
