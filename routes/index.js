@@ -5,17 +5,18 @@ const User = require('../models/User');
 const Bus = require('../models/Bus');
 const Schedule = require('../models/Schedule');
 const Checkpoint = require('../models/Checkpoint');
+const Seat = require('../models/Seat');
 
 router.get('/', (req, res) => {
-    res.status(200).render('welcome')
+    res.render('welcome')
 });
 
 router.get('/dashboard', ensureAuthenticated, async(req, res) => {
     if (req.user.roles[0] == 'Admin') {
         const users = await User.find();
-        res.status(200).render('adminDashboard', { user: req.user, users })
+        res.render('adminDashboard', { user: req.user, users })
     }
-    res.status(200).render('operatorDashboard', { user: req.user })
+    res.render('operatorDashboard', { user: req.user })
 });
 
 router.get('/dashboard/buses', ensureAuthenticated, async(req, res) => {
@@ -24,63 +25,61 @@ router.get('/dashboard/buses', ensureAuthenticated, async(req, res) => {
 });
 
 router.get('/dashboard/bookers', ensureAuthenticated, async(req, res) => {
-    // const bookers = await User.find({ roles: '' });
     res.render('bookers', { user: req.user });
 });
 
 router.get('/dashboard/checkpoints', ensureAuthenticated, async(req, res) => {
     const chkpoints = await Checkpoint.find();
     let checkpoints = chkpoints.map(async cp => {
-        await Bus.findOne({ _id: cp.busId }).then(async result => {
+        await Bus.findOne({ _id: cp.busId }).then(async(result) => {
+            // if (err) {
+            //     req.flash('error_msg', 'Bus not found');
+            //     next();
+            // }
             const { _doc } = cp;
-            cp = { _doc, busName: result.busName };
+            const { busId, checkpoint } = _doc;
+            cp = { busId, checkpoint, busName: result.busName };
         });
         return cp;
     });
-
-    // exports.getAuthorUserNames = async (req, res) => {
-    //     if (req.body.data) {
-    //       let mappedArr = req.body.data.map(async nade => {
-    //         await User.findOne({ _id: nade.authorID }).then(result => {
-    //           nade.author = result.username;
-    //         });
-    //         return nade;
-    //       });
-    //       res.status(200).send(await Promise.all(mappedArr));
-    //     }
-    //   };
-    console.log(checkpoints)
-    let cps = {};
-    const { checkpoint, busId } = checkpoints._doc;
-    cps = {...cps, busName, checkpoint, busId };
-    // console.log(cps)
-    res.render('checkpoints', { user: req.user, cps });
+    checkpoints = await Promise.all(checkpoints);
+    res.render('checkpoints', { user: req.user, checkpoints });
 });
 
 router.get('/dashboard/schedules', ensureAuthenticated, async(req, res) => {
     let schedules = await Schedule.find();
+    let newschedules = schedules.map(async sh => {
+        await Bus.findOne({ _id: sh.busId }).then(async(result) => {
+            // if (err) {
+            //     req.flash('error_msg', 'Bus not found');
+            //     next();
+            // }
+            const { _doc } = sh;
+            const { busId, depart, arrival, pickup, dropoff } = _doc;
+            sh = { busId, depart, arrival, pickup, dropoff, busName: result.busName };
+        });
+        return sh;
+    });
+    newschedules = await Promise.all(newschedules);
+    res.render('schedules', { user: req.user, newschedules });
+});
 
-    // let busPromises = schedules.map(async(sch, i) => await Bus.find(sch.busId));
-    // let checkPromises = schedules.map(async(sch, i) => await Checkpoint.find(sch.checkpoints.forEach(cp => cp.checkpoint)));
-    // const busNames = await Promise.all(busPromises);
-    // const cps = await Promise.all(checkPromises);
-    // const checkpoints = cps[0];
-    // const buses = busNames[0];
-
-    // let shs = [];
-    // let newSchedules = schedules.forEach(async(sh) => {
-    //     let shh = [];
-    //     let bus = await Bus.find(sh.busId);
-    //     // let checkpoints = await Checkpoint.find(sh.checkpoints.forEach(cp => cp.checkpoint));
-    //     let checkPromises = schedules.map(async(sch, i) => await Checkpoint.find(sch.checkpoints.forEach(cp => cp.checkpoint)));
-    //     const cps = await Promise.all(checkPromises);
-    //     const checkpoints = cps[0];
-    //     shh.push(sh);
-    //     shh.push(bus);
-    //     shh.push(checkpoints);
-    //     shs.push(shhh);
+router.get('/dashboard/seats', ensureAuthenticated, async(req, res, next) => {
+    let seats = await Seat.find();
+    // let newseats = seats.map(async sh => {
+    //     await Bus.findOne({ _id: sh.busId }).then(async(result) => {
+    //         // if (err) {
+    //         //     req.flash('error_msg', 'Bus not found');
+    //         //     next();
+    //         // }
+    //         const { _doc } = sh;
+    //         const { seat } = _doc;
+    //         sh = { seat, busName: result.busName };
+    //     });
+    //     return sh;
     // });
-    res.render('schedules', { user: req.user, schedules });
+    // newseats = await Promise.all(newseats);
+    res.render('seats', { user: req.user, seats });
 });
 
 module.exports = router;

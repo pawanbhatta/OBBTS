@@ -20,7 +20,11 @@ const busSchema = new mongoose.Schema({
     operator: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User'
-    }
+    },
+    seats: { //Just added
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Seat'
+    },
 }, { timestamps: true });
 
 const Bus = mongoose.model('Bus', busSchema);

@@ -63,10 +63,10 @@ app.use('/users', require('./routes/users'));
 app.use('/bus', require('./routes/bus'));
 app.use('/schedule', require('./routes/schedule'));
 app.use('/checkpoint', require('./routes/checkpoint'));
-// app.use('/booker', require('./routes/booker'));
+app.use('/seat', require('./routes/seat'));
+app.use('/booker', require('./routes/booker'));
 // app.use('/passenger', require('./routes/passenger'));
 // app.use('/ticket', require('./routes/ticket'));
-// app.use('/seat', require('./routes/seat'));
 
 const PORT = process.env.PORT || 3000;
 

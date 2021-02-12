@@ -1,5 +1,7 @@
 const bcrypt = require('bcryptjs');
 const passport = require('passport');
+const Bus = require('../models/Bus');
+const Schedule = require('../models/Schedule');
 const User = require('../models/User');
 
 module.exports = {
@@ -69,12 +71,25 @@ module.exports = {
                         newUser.password = hash;
                         req.flash('success_msg', 'You are now registered');
                         await newUser.save();
-                        res.status(200).redirect('/users/login');
+                        res.redirect('/users/login');
                     });
                 });
             }
         }
     },
+
+    // delete: async(req, res) => {
+    //     const user = await User.findById(req.params.userId);
+    //     if (!user) res.json({ message: "User not found" });
+    //     await user.remove();
+
+    //     for (let i = 0; i < user.buses.length; i++) {
+    //         await Bus.findByIdAndDelete(user.buses[i]);
+    //         user.buses.pop();
+    //     }
+
+    //     res.render('/dashboard/buses');
+    // },
 
     logout: (req, res) => {
         req.logout();
